@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Platform } from 'react-native';
+import { StyleSheet, Text, View, Platform, PermissionsAndroid, Permission } from 'react-native';
+import { request, PERMISSIONS } from 'react-native-permissions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useState, useEffect } from 'react';
 import { Pedometer } from 'expo-sensors';
@@ -9,19 +10,39 @@ const App = () => {
   const [pedomaterConnected, setPedomaterConnected] = useState<boolean>(false);
 
   const subscribe = async () => {
-    await Pedometer.requestPermissionsAsync();
-    setPedomaterConnected(await Pedometer.isAvailableAsync());
+    try {
+      const granted = await PermissionsAndroid.request(
+        'com.google.android.gms.permission.ACTIVITY_RECOGNITION',
+        {
+          title: 'Cool Photo App Camera Permission',
+          message:
+            'Cool Photo App needs access to your camera ' +
+            'so you can take awesome pictures.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('You can use the camera');
+        setPedomaterConnected(true);
+      } else {
+        console.log('Camera permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
 
     if (pedomaterConnected) {
-      const end = new Date();
-      const start = new Date();
-      start.setDate(end.getDate() - 1);
-
-      Pedometer.watchStepCount(val => setStepCount(val.steps));
+      Pedometer.watchStepCount(val => { 
+        console.log('step!')
+        setStepCount(val.steps);
+      });
     }
   };
 
   useEffect(() => {
+    
     subscribe();
   }, []);
 

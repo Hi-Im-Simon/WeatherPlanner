@@ -21,7 +21,7 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff",
-        "permissions": ["Motion"]
+        "permissions": ["Motion", "ACTIVITY_RECOGNITION "]
       }
     },
     "web": {
@@ -33,7 +33,8 @@
         {
           "motionPermission": "Allow $(PRODUCT_NAME) to access your device motion."
         }
-      ]
+      ],
+      "./android-manifest.plugin.js"
     ]
   }
 }
