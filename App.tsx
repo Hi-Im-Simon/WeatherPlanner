@@ -7,20 +7,20 @@ import * as Permissions from 'expo-permissions';
 
 const App = () => {
   const [stepCount, setStepCount] = useState<number>(0);
-  const [pedomaterConnected, setPedomaterConnected] = useState<boolean>(false);
+  const [pedometerConnected, setPedometerConnected] = useState<boolean>(false);
 
   const subscribe = async () => {
     Pedometer.isAvailableAsync().then(
       (result) => {
-        setPedomaterConnected(true);
+        setPedometerConnected(true);
       },
       (error) => {
-        setPedomaterConnected(false);
+        setPedometerConnected(false);
         console.log(error);
       }
     );
 
-    if (pedomaterConnected) {
+    if (pedometerConnected) {
       Pedometer.watchStepCount(val => { 
         console.log('step!')
         setStepCount(val.steps);
@@ -36,7 +36,7 @@ const App = () => {
   return (
     <SafeAreaView style={styles.container}>
       {
-        pedomaterConnected ?
+        pedometerConnected ?
           <>
             <StatusBar style="auto" />
             <Text>Hello!</Text>
