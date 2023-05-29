@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "AM-Project",
-    "slug": "AM-Project",
+    "slug": "am-project",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,26 +15,24 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.hiimsimon.amproject"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff",
-        "permissions": ["Motion", "ACTIVITY_RECOGNITION "]
-      }
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.hiimsimon.amproject"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      [
-        "expo-sensors",
-        {
-          "motionPermission": "Allow $(PRODUCT_NAME) to access your device motion."
-        }
-      ],
-      "./android-manifest.plugin.js"
-    ]
+    "extra": {
+      "eas": {
+        "projectId": "e7e8cf6a-a91b-4eb3-a1ce-96a396a7e69d"
+      }
+    },
+    "owner": "hi-im-simon"
   }
 }
