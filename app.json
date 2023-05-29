@@ -28,6 +28,14 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(name) to use your location."
+        }
+      ]
+    ],
     "extra": {
       "eas": {
         "projectId": "e7e8cf6a-a91b-4eb3-a1ce-96a396a7e69d"
