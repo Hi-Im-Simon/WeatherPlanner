@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
+import { DateTime } from 'luxon';
 
 import dateToUserTimeZone from '../../utils/dateToUserTimeZone';
 
 const WeatherCell = (props: { [name: string]: any }) => {
-    const [rawDate, setRawDate] = useState<Date | null>(null);
+    const [rawDate, setRawDate] = useState<DateTime | null>(null);
     
     useEffect(() => {
         setRawDate(dateToUserTimeZone(props.time));
@@ -20,22 +21,19 @@ const WeatherCell = (props: { [name: string]: any }) => {
         >
             <Text style={props.isCurrentCell && styles.ifCurrentCellText}>
                 {/* day of week */}
-                {(rawDate?.getHours() == 0 || props.i == 0) &&
-                    rawDate?.toLocaleString('default', { weekday: 'long' }).split(',')[0]
+                {(rawDate?.hour == 0 || props.i == 0) &&
+                    rawDate?.toFormat('EEEE')
                 }
             </Text>
             <Text style={props.isCurrentCell && styles.ifCurrentCellText}>
                 {/* date */}
-                {(rawDate?.getHours() == 0 || props.i == 0) &&
-                    rawDate?.toLocaleDateString()
+                {(rawDate?.hour == 0 || props.i == 0) &&
+                    rawDate?.toFormat('dd/MM/yyyy')
                 }
             </Text>
             <Text style={props.isCurrentCell && styles.ifCurrentCellText}>
                 {/* hour */}
-                {rawDate?.toLocaleTimeString([], {
-                    hour: 'numeric',
-                    minute: 'numeric'
-                })}
+                {rawDate?.toFormat('hh:mm a')}
             </Text>
             <Text style={props.isCurrentCell && styles.ifCurrentCellText}>
                 Act: {props.temperature}{props.temperatureUnits}
