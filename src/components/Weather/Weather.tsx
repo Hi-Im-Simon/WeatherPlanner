@@ -3,6 +3,7 @@ import { Text, ScrollView, StyleSheet, View, Dimensions } from 'react-native';
 import Slider from '@react-native-community/slider';
 
 import WeatherCell from './WeatherCell';
+import CurrentWeatherPanel from './CurrentWeatherPanel';
 
 const DEFAULT_SLIDER_VALUE = 3;
 
@@ -20,11 +21,14 @@ const Weather = (props: { [name: string]: any }) => {
         fetch(`https://api.open-meteo.com/v1/forecast?
             latitude=${props.coords.latitude}&
             longitude=${props.coords.longitude}&
+            timezone=GMT&
             current_weather=true&
-            hourly=temperature_2m,windspeed_10m,apparent_temperature
+            hourly=temperature_2m,apparent_temperature,precipitation_probability,weathercode,windspeed_10m
+            &daily=sunrise,sunset
             `.replace(/\s/g, '') // remove spaces
         ).then((res) => {
             res.json().then((json) => {
+                console.log(json)
                 setWeather(json);
                 //also scroll to current time
                 const currentHourGMT = new Date(json.current_weather.time).getHours()
@@ -35,13 +39,6 @@ const Weather = (props: { [name: string]: any }) => {
                 });
             });
         });
-    }
-
-    const dateToUserTZ = (dateString: string): Date => {
-        const date = new Date(dateString);
-        const timezoneOffset = -(date.getTimezoneOffset() * 60 * 1000);
-
-        return new Date(date.getTime() + timezoneOffset);
     }
 
     const handleSliderValueChange = (i: number) => {
@@ -110,7 +107,10 @@ const Weather = (props: { [name: string]: any }) => {
                 ?
                 <>
                     <View style={styles.part}>
-                        <Text>{weather.current_weather.temperature}</Text>
+                        <CurrentWeatherPanel
+                            weather={weather}
+                            i={currentCell}
+                        />
                     </View>
 
                     <View style={styles.part}>
@@ -137,7 +137,6 @@ const Weather = (props: { [name: string]: any }) => {
                                         key={`WeatherCell-${i}`}
                                         i={i}
                                         isCurrentCell={currentCell == i}
-                                        dateToUserTZ={dateToUserTZ}
                                         time={weather.hourly.time[i]}
                                         temperature={weather.hourly.temperature_2m[i]}
                                         apparentTemperature={weather.hourly.apparent_temperature[i]}

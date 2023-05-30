@@ -6,7 +6,8 @@
     "target": "esnext",
     "module": "commonjs",
     "types": [
-      "react-native"
+      "react-native",
+      "webpack-env"
     ],
     "lib": [
       "es2019",

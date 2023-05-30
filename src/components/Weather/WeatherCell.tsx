@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 
+import dateToUserTimeZone from '../../utils/dateToUserTimeZone';
 
 const WeatherCell = (props: { [name: string]: any }) => {
     const [rawDate, setRawDate] = useState<Date | null>(null);
     
     useEffect(() => {
-        setRawDate(props.dateToUserTZ(props.time));
+        setRawDate(dateToUserTimeZone(props.time));
     }, []);
 
     return (
