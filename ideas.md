@@ -13,4 +13,4 @@ pod input barem dodać:
 - pokazać jaki interval został wybrany zamiast tego
 
 !!!!!!!!!!!!!!!!!!!!!
-NIE ZNAJDUJE POPRAWNEJ DATY JEŚLI LOKALIZACJA BYŁA NAJPIERW WYŁĄCZONA
+NIE ZNAJDUJE POPRAWNEJ DATY JEŚLI LOKALIZACJA BYŁA NAJPIERW WYŁĄCZONA?

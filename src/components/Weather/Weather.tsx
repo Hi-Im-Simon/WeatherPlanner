@@ -1,21 +1,17 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Text, ScrollView, StyleSheet, View, Dimensions } from 'react-native';
-import Slider from '@react-native-community/slider';
+import { LinearGradient } from 'expo-linear-gradient';
+import MaskedView from '@react-native-masked-view/masked-view';
 
 import WeatherCell from './WeatherCell';
 import CurrentWeatherPanel from './CurrentWeatherPanel';
-
-const DEFAULT_SLIDER_VALUE = 3;
+import InputOutputPanel from './InputOutputPanel';
 
 const Weather = (props: { [name: string]: any }) => {
     const [weather, setWeather] = useState<any>(null);
     const [currentCell, setCurrentCell] = useState<number>(0);
-    const [sliderVal, setSliderVal] = useState<{[name: string]: number | string}>();
-    const [chosenPeriod, setChosenPeriod] = useState<string>();
     const scrollViewRef = useRef<ScrollView>(null);
     const screenWidth = useRef<number>(Dimensions.get('window').width);
-
-    const [test, setTest] = useState<any>(null);
     
     const getWeather = async () => {
         fetch(`https://api.open-meteo.com/v1/forecast?
@@ -36,62 +32,7 @@ const Weather = (props: { [name: string]: any }) => {
                 scrollToCell(currentHourGMT, false);
             });
         });
-    }
-
-    const handleSliderValueChange = (i: number) => {
-        let top = 0;
-        let topTail = '';
-        let bottom = 0;
-        let bottomTail = '';
-        // 1
-        if (i == 1){
-            top = 1;
-            topTail = 'hour';
-        }
-        // 2 - 12 / step = 1
-        else if (i <= 12) {
-            top = i;
-            topTail = 'hours';
-        }
-        // 14 - 22 / step = 2 (13 - 17)
-        else if (i <= 17) {
-            top = 12 + ((i - 12) * 2);
-            topTail = 'hours';
-        }
-        // 24
-        else if (i <= 18) {
-            top = 1;
-            topTail = 'day';
-        }
-        // 28 - 47 / step = 4 (19 - 23)
-        else if (i <= 23) {
-            top = 1;
-            topTail = 'day';
-            bottom = (i - 18) * 4;
-            bottomTail = 'hours';
-        }
-        // 48
-        else if (i <= 24) {
-            top = 2;
-            topTail = 'days';
-        }
-        // 49 - 6.5day / step = 12 (25 - 33)
-        else if (i <= 33) {
-            top = 2 + Math.floor((i - 24) / 2);
-            topTail = 'days';
-            bottom = ((i - 24) % 2) * 12;
-            bottomTail = 'hours';
-        }
-        else {
-            top = 7;
-            topTail = 'days+'
-        }
-
-        setSliderVal({
-            top: top, topTail: topTail,
-            bottom: bottom, bottomTail: bottomTail
-        });
-    }
+    };
 
     const scrollToCell = (i: number, animatedScroll: boolean = true) => {
         scrollViewRef.current?.scrollTo({
@@ -99,11 +40,10 @@ const Weather = (props: { [name: string]: any }) => {
             animated: animatedScroll,
         });
         setCurrentCell(i);
-    }
+    };
 
     useEffect(() => {
         getWeather();
-        handleSliderValueChange(DEFAULT_SLIDER_VALUE);
     }, []);
 
     return (
@@ -111,14 +51,21 @@ const Weather = (props: { [name: string]: any }) => {
             {weather !== null
                 ?
                 <>
-                    <View style={styles.part}>
+                    <View style={[styles.part, styles.currentWeatherPanel]}>
                         <CurrentWeatherPanel
                             weather={weather}
                             i={currentCell}
                         />
                     </View>
 
-                    <View style={styles.part}>
+                    <MaskedView style={[styles.part, styles.weatherCells]}
+                        maskElement={
+                            <LinearGradient
+                                style={styles.gradient}
+                                colors={['transparent', 'white', 'transparent']} locations={[0, 0.5, 1]}
+                                start={{ x: -0.3, y: 0 }} end={{ x: 1.3, y: 0 }}
+                            />
+                        }>
                         <ScrollView 
                             ref={scrollViewRef}
                             showsHorizontalScrollIndicator={false}
@@ -153,24 +100,16 @@ const Weather = (props: { [name: string]: any }) => {
                                 })
                             }
                         </ScrollView>
-                    </View>
+                    </MaskedView>
 
-                    <View style={styles.part}>
-                        <Slider
-                            style={[
-                                styles.slider,
-                                {width: screenWidth.current * 0.75}
-                            ]}
-                            minimumValue={1}
-                            maximumValue={34}
-                            step={1}
-                            onValueChange={handleSliderValueChange}
-                            value={DEFAULT_SLIDER_VALUE}
+                    {/* bottom panel */}
+                    <View style={[styles.part, styles.bottomPanel]}>
+                        <InputOutputPanel
+                            weather={weather}
+                            currentCell={currentCell}
+                            screenWidth={screenWidth}
                         />
-                        <Text>{sliderVal?.top ? `${sliderVal?.top} ${sliderVal?.topTail}` : ''}</Text>
-                        <Text>{sliderVal?.bottom ? `${sliderVal?.bottom} ${sliderVal?.bottomTail}` : ''}</Text>
-
-                        <Text>{currentCell}</Text>
+                        
                     </View>
                 </>
                 :
@@ -187,16 +126,32 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     part: {
-        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
     },
-    cell: {
-        width: 100,
+
+    // top panel - current weather
+    currentWeatherPanel: {
+        flex: 10,
     },
-    slider: {
-        
-    }
+
+    // middle panel - scrollview with cells
+    gradient: {
+        flex: 1,
+        flexDirection: 'row',
+        height: '100%',
+    },
+    weatherCells: {
+        flex: 5,
+    },
+    cell: {
+        width: 90,
+    },
+
+    // bottom panels
+    bottomPanel: {
+        flex: 15,
+    },
 });
 
 export default Weather;

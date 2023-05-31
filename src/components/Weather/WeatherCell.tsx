@@ -12,7 +12,7 @@ const WeatherCell = (props: { [name: string]: any }) => {
     }, []);
 
     return (
-        <TouchableOpacity 
+        <TouchableOpacity
             onPress={() => props.scrollToCell(props.i)}
             style={[
                 styles.container,
@@ -20,23 +20,23 @@ const WeatherCell = (props: { [name: string]: any }) => {
                 (props.isCurrentCell && styles.ifCurrentCellContainer),
             ]}
         >
-            <Text style={props.isCurrentCell && styles.ifCurrentCellTitleText}>
-                {/* day of week */}
-                {(rawDate?.hour == 0 || props.i == 0 || props.isCurrentCell) &&
-                    rawDate?.toFormat('EEEE')
-                }
-            </Text>
-            <Text style={props.isCurrentCell && styles.ifCurrentCellTitleText}>
-                {/* date */}
-                {(rawDate?.hour == 0 || props.i == 0 || props.isCurrentCell) &&
-                    rawDate?.toFormat('dd/MM/yyyy')
-                }
-            </Text>
+            {(rawDate?.hour == 0 || props.i == 0 || props.isCurrentCell) &&
+                <Text style={props.isCurrentCell && styles.ifCurrentCellTitleText}>
+                    {/* day of week */}
+                    {rawDate?.toFormat('EEEE')}
+                </Text>
+            }
+            {(rawDate?.hour == 0 || props.i == 0 || props.isCurrentCell) &&
+                <Text style={props.isCurrentCell && styles.ifCurrentCellText}>
+                    {/* date */}
+                    {rawDate?.toFormat('dd/MM/yyyy')}
+                </Text>
+            }
             <Text style={props.isCurrentCell && styles.ifCurrentCellText}>
                 {/* hour */}
                 {rawDate?.toFormat('hh:mm a')}
             </Text>
-            <Text style={props.isCurrentCell && styles.ifCurrentCellText}>
+            <Text style={props.isCurrentCell && styles.ifCurrentCellTitleText}>
                 {props.temperature}{props.temperatureUnits}
             </Text>
         </TouchableOpacity>
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     ifCurrentCellContainer: {
     },
     ifCurrentCellText: {
-        fontWeight: 'bold',
+        fontWeight: '500',
     },
     ifCurrentCellTitleText: {
         fontWeight: 'bold',

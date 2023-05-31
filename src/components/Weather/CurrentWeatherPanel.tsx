@@ -55,7 +55,7 @@ const CurrentWeatherPanel = (props: { [name: string]: any }) => {
         }
 
         return images.current(`./${timeOfDay}-${weatherCode}.png`);
-    }
+    };
 
     const getTimeFromNow = () => {
         const thisDate = dateToUserTimeZone(props.weather.hourly.time[props.i]);
@@ -106,11 +106,11 @@ const CurrentWeatherPanel = (props: { [name: string]: any }) => {
         }
 
         return `${prefix}${dd}${hh}${mm}${suffix}`.trim();
-    }
+    };
 
     useEffect(() => {
         setDayId(Math.floor(props.i / 24));
-    })
+    }, [props.i]);
 
     return (
         <>
