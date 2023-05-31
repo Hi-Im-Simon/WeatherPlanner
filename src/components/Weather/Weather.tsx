@@ -23,12 +23,13 @@ const Weather = (props: { [name: string]: any }) => {
             longitude=${props.coords.longitude}&
             timezone=GMT&
             current_weather=true&
-            hourly=temperature_2m,apparent_temperature,precipitation_probability,weathercode,windspeed_10m
-            &daily=sunrise,sunset
+            hourly=temperature_2m,apparent_temperature,precipitation_probability,weathercode,windspeed_10m&
+            daily=sunrise,sunset&
+            forecast_days=16
             `.replace(/\s/g, '') // remove spaces
         ).then((res) => {
             res.json().then((json) => {
-                // console.log(json)
+                console.log(json)
                 setWeather(json);
                 //also scroll to current time
                 const currentHourGMT = new Date(json.current_weather.time).getHours()

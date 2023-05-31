@@ -146,6 +146,7 @@ const CurrentWeatherPanel = (props: { [name: string]: any }) => {
                                 {props.weather.hourly_units.windspeed_10m}
                             </Text>
                         </View>
+                        { props.weather.hourly.precipitation_probability[props.i] !== null &&
                         <View style={styles.dataPairs}>
                             {/* precipitation_probability */}
                             <Text style={[styles.dataLeftText, styles.text]}>Precipitation</Text>
@@ -154,6 +155,8 @@ const CurrentWeatherPanel = (props: { [name: string]: any }) => {
                                 {props.weather.hourly_units.precipitation_probability}
                             </Text>
                         </View>
+                        }
+                        
                     </View>
 
                     <View style={styles.containerCenter}>
