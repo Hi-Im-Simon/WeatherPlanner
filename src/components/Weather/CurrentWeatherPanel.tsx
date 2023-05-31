@@ -124,7 +124,7 @@ const CurrentWeatherPanel = (props: { [name: string]: any }) => {
                         {/* display currently selected weather data */}
                         <View style={styles.dataPairs}>
                             {/* apparent_temperature */}
-                            <Text style={[styles.dataLeftText, styles.text]}>Apparent</Text>
+                            <Text style={[styles.dataLeftText, styles.text]}>Feels like</Text>
                             <Text style={[styles.dataRightText, styles.text]}>
                                 {props.weather.hourly.apparent_temperature[props.i]}
                                 {props.weather.hourly_units.apparent_temperature}
@@ -175,7 +175,7 @@ const CurrentWeatherPanel = (props: { [name: string]: any }) => {
                     <View style={styles.containerRight}>
                         {/* display time difference from now */}
                         <View style={styles.dataPairs}>
-                            <Text style={[styles.dataLeftText, styles.text]}>Time from now</Text>
+                            <Text style={[styles.dataLeftText, styles.text]}>Due</Text>
                             <Text style={[styles.dataRightText, styles.text]}>
                                 {getTimeFromNow()}
                             </Text>
