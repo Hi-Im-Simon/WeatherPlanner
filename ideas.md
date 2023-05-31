@@ -6,3 +6,8 @@ nad tym aktualne dane o pogodzie
 
 ? dodawanie tripów do bazy, zapiszą się i przy następnym odpaleniu apki sprawdzi się
 czy pogoda dalej jest dobra (może jakiś alert w razie zmiany?)
+
+!!!!!!!
+pod input barem dodać:
+- warning jeśli wybrany interval jest dłuższy niż current data + interval
+- pokazać jaki interval został wybrany zamiast tego

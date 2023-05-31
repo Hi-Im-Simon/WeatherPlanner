@@ -19,15 +19,15 @@ const WeatherCell = (props: { [name: string]: any }) => {
                 (props.isCurrentCell && styles.ifCurrentCellContainer),
             ]}
         >
-            <Text style={props.isCurrentCell && styles.ifCurrentCellText}>
+            <Text style={props.isCurrentCell && styles.ifCurrentCellTitleText}>
                 {/* day of week */}
-                {(rawDate?.hour == 0 || props.i == 0) &&
+                {(rawDate?.hour == 0 || props.i == 0 || props.isCurrentCell) &&
                     rawDate?.toFormat('EEEE')
                 }
             </Text>
-            <Text style={props.isCurrentCell && styles.ifCurrentCellText}>
+            <Text style={props.isCurrentCell && styles.ifCurrentCellTitleText}>
                 {/* date */}
-                {(rawDate?.hour == 0 || props.i == 0) &&
+                {(rawDate?.hour == 0 || props.i == 0 || props.isCurrentCell) &&
                     rawDate?.toFormat('dd/MM/yyyy')
                 }
             </Text>
@@ -57,6 +57,10 @@ const styles = StyleSheet.create({
     },
     ifCurrentCellText: {
         fontWeight: 'bold',
+    },
+    ifCurrentCellTitleText: {
+        fontWeight: 'bold',
+        fontSize: 17,
     }
 });
 
