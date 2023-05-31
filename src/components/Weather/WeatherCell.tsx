@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Text, StyleSheet, View } from 'react-native';
+import { Text, StyleSheet, View, TouchableOpacity  } from 'react-native';
 import { DateTime } from 'luxon';
 
 import dateToUserTimeZone from '../../utils/dateToUserTimeZone';
@@ -12,7 +12,8 @@ const WeatherCell = (props: { [name: string]: any }) => {
     }, []);
 
     return (
-        <View 
+        <TouchableOpacity 
+            onPress={() => props.scrollToCell(props.i)}
             style={[
                 styles.container,
                 {width: props.cellWidth},
@@ -36,12 +37,9 @@ const WeatherCell = (props: { [name: string]: any }) => {
                 {rawDate?.toFormat('hh:mm a')}
             </Text>
             <Text style={props.isCurrentCell && styles.ifCurrentCellText}>
-                Act: {props.temperature}{props.temperatureUnits}
+                {props.temperature}{props.temperatureUnits}
             </Text>
-            <Text style={props.isCurrentCell && styles.ifCurrentCellText}>
-                App: {props.apparentTemperature}{props.temperatureUnits}
-            </Text>
-        </View>
+        </TouchableOpacity>
     );
 };
 

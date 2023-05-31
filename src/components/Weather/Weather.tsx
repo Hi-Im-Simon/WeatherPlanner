@@ -29,15 +29,11 @@ const Weather = (props: { [name: string]: any }) => {
             `.replace(/\s/g, '') // remove spaces
         ).then((res) => {
             res.json().then((json) => {
-                console.log(json)
+                // console.log(json)
                 setWeather(json);
                 //also scroll to current time
                 const currentHourGMT = new Date(json.current_weather.time).getHours()
-                setCurrentCell(currentHourGMT);
-                scrollViewRef.current?.scrollTo({ 
-                    x: currentHourGMT * styles.cell.width,
-                    animated: false
-                });
+                scrollToCell(currentHourGMT, false);
             });
         });
     }
@@ -97,6 +93,14 @@ const Weather = (props: { [name: string]: any }) => {
         });
     }
 
+    const scrollToCell = (i: number, animatedScroll: boolean = true) => {
+        scrollViewRef.current?.scrollTo({
+            x: i * styles.cell.width,
+            animated: animatedScroll,
+        });
+        setCurrentCell(i);
+    }
+
     useEffect(() => {
         getWeather();
         handleSliderValueChange(DEFAULT_SLIDER_VALUE);
@@ -137,6 +141,7 @@ const Weather = (props: { [name: string]: any }) => {
                                     return <WeatherCell
                                         key={`WeatherCell-${i}`}
                                         i={i}
+                                        scrollToCell={scrollToCell}
                                         isCurrentCell={currentCell == i}
                                         time={weather.hourly.time[i]}
                                         temperature={weather.hourly.temperature_2m[i]}
@@ -190,7 +195,7 @@ const styles = StyleSheet.create({
         width: 100,
     },
     slider: {
-        height: 40
+        
     }
 });
 
