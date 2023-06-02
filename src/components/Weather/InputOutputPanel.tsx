@@ -2,8 +2,6 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Text, StyleSheet, View, ScrollView, Button } from 'react-native';
 import Slider from '@react-native-community/slider';
 
-import Map from './MapMenu';
-
 import dateToUserTimeZone from '../../utils/dateToUserTimeZone';
 
 const DEFAULT_SLIDER_VALUE = 3;
@@ -150,6 +148,8 @@ const InputOutputPanel = (props: { [name: string]: any }) => {
             const hasDays = (weatherCodesDay.size > 0);
             const hasNights = (weatherCodesNight.size > 0);
 
+            
+
             // console.log(weatherCodesDay)
             // console.log(weatherCodesNight)
             // console.log(minTempDay)
@@ -163,10 +163,21 @@ const InputOutputPanel = (props: { [name: string]: any }) => {
 
     return (
         <View style={styles.container}>
+            <View style={styles.hr} />
             {/* custom interval slider with description */}
             <View style={[styles.part, styles.optionsView]}>
-                <Text>{sliderVal?.bottom ? `${sliderVal?.bottom} ${sliderVal?.bottomTail}` : ''}</Text>
-                <Text>{sliderVal?.top ? `${sliderVal?.top} ${sliderVal?.topTail}` : ''}</Text>
+                <View style={styles.sliderTextAll}>
+                    <Text style={styles.sliderTextEdge}></Text>
+                    <Text style={styles.sliderTextCenter}>Adventure length:</Text>
+                    <Text style={styles.sliderTextEdge}>{sliderVal?.top ? `${sliderVal?.top} ${sliderVal?.topTail}` : ''}</Text>
+                </View>
+
+                <View style={styles.sliderTextAll}>
+                    <Text style={styles.sliderTextEdge}></Text>
+                    <Text style={styles.sliderTextCenter}></Text>
+                    <Text style={[styles.sliderTextEdge, styles.sliderTextEdgeSecondary]}>{sliderVal?.bottom ? `${sliderVal?.bottom} ${sliderVal?.bottomTail}` : ''}</Text>
+                </View>
+
                 <Slider
                     style={[styles.slider,
                         { width: props.screenWidth.current * 0.75 }]}
@@ -174,15 +185,19 @@ const InputOutputPanel = (props: { [name: string]: any }) => {
                     onValueChange={handleSliderValue}
                     onSlidingComplete={(i: number) => handleSliderValue(i, true)}
                 />
-                <Text style={styles.warningMsg} numberOfLines={2}
-                    onPress={() => setPeriodWarningMsg('')}
-                >
-                    {periodWarningMsg}{periodWarningMsg ? ' TAP TO HIDE' : ''}
-                </Text>
+                {periodWarningMsg &&
+                    <Text style={styles.warningMsg} numberOfLines={2}
+                        onPress={() => setPeriodWarningMsg('')}
+                    >{periodWarningMsg} TAP TO HIDE</Text>
+                }
+                
                 {/* <Button title='Search'
-                    onPress={}
+                    onPress={() => console.log()}
                 /> */}
             </View>
+
+            <View style={styles.hr} />
+
             <View style={[styles.part, styles.mainView]}>
                 <ScrollView style={styles.scrollView}
                     showsVerticalScrollIndicator={false}
@@ -203,27 +218,41 @@ const InputOutputPanel = (props: { [name: string]: any }) => {
 };
 
 const styles = StyleSheet.create({
+    hr: {
+        borderBottomColor: 'black',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+    },
     container: {
         flex: 1,
         alignSelf: 'stretch',
-        alignItems: 'center',
-        justifyContent: 'center',
     },
     part: {
-        alignSelf: 'stretch',
-        alignItems: 'center',
-        justifyContent: 'center',
+        padding: 20,
     },
 
     // options area
     optionsView: {
+        alignItems: 'center',
+        // backgroundColor: '#9c9a9a',
+    },
+    sliderTextAll: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    sliderTextCenter: {
         flex: 1,
+        textAlign: 'center',
+    },
+    sliderTextEdge: {
+        flex: 1,
+        textAlign: 'left',
+    },
+    sliderTextEdgeSecondary: {
+        fontSize: 11,
     },
     slider: {
-
     },
     warningMsg: {
-        flex: 1,
         overflow: 'hidden',
         color: '#d40f0f',
         textAlign: 'center',
@@ -232,11 +261,9 @@ const styles = StyleSheet.create({
 
     // main area
     mainView: {
-        flex: 3,
     },
     scrollView: {
-        flex: 1,
-        alignSelf: 'stretch',
+        // alignSelf: 'stretch',
     }
 });
 

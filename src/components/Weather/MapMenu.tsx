@@ -32,7 +32,7 @@ const MapMenu = (props: {[name: string]: any}) => {
                 {/* refresh button */}
                 <View style={styles.dropdownMenuItem}>
                     <Button
-                        title='Your location'
+                        title='My location'
                         onPress={() => props.getLocation()}
                     />
                 </View>
