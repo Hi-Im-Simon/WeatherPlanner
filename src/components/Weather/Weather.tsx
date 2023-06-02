@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Text, ScrollView, StyleSheet, View, Dimensions } from 'react-native';
+import { Text, ScrollView, StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import MaskedView from '@react-native-masked-view/masked-view';
 
@@ -11,8 +11,7 @@ const Weather = (props: { [name: string]: any }) => {
     const [weather, setWeather] = useState<any>(null);
     const [currentCell, setCurrentCell] = useState<number>(0);
     const scrollViewRef = useRef<ScrollView>(null);
-    const screenWidth = useRef<number>(Dimensions.get('window').width);
-    
+
     const getWeather = async () => {
         fetch(`https://api.open-meteo.com/v1/forecast?
             latitude=${props.coords.latitude}&
@@ -25,7 +24,7 @@ const Weather = (props: { [name: string]: any }) => {
             `.replace(/\s/g, '') // remove spaces
         ).then((res) => {
             res.json().then((json) => {
-                // console.log(json)
+                console.log(json)
                 setWeather(json);
                 //also scroll to current time
                 const currentHourGMT = new Date(json.current_weather.time).getHours()
@@ -44,7 +43,8 @@ const Weather = (props: { [name: string]: any }) => {
 
     useEffect(() => {
         getWeather();
-    }, []);
+        console.log(props.coords)
+    }, [props.coords]);
 
     return (
         <View style={styles.container}>
@@ -76,7 +76,7 @@ const Weather = (props: { [name: string]: any }) => {
                             )}
                             snapToAlignment={'start'}
                             contentContainerStyle={{
-                                paddingHorizontal: ((screenWidth.current / 2) - (styles.cell.width / 2))
+                                paddingHorizontal: ((props.screenWidth.current / 2) - (styles.cell.width / 2))
                             }}
                             onMomentumScrollEnd={
                                 // when scrolling stops, calculated which element will be displayed
@@ -107,7 +107,7 @@ const Weather = (props: { [name: string]: any }) => {
                         <InputOutputPanel
                             weather={weather}
                             currentCell={currentCell}
-                            screenWidth={screenWidth}
+                            screenWidth={props.screenWidth}
                         />
                         
                     </View>

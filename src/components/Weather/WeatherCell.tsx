@@ -66,7 +66,8 @@ const styles = StyleSheet.create({
 export default React.memo(WeatherCell, (prevProps, nextProps) => {
     if (
         prevProps.time !== nextProps.time ||
-        prevProps.isCurrentCell !== nextProps.isCurrentCell
+        prevProps.isCurrentCell !== nextProps.isCurrentCell ||
+        prevProps.temperature !== nextProps.temperature
     ) return false;
     return true;
 });

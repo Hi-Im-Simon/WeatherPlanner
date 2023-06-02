@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 import dateToUserTimeZone from '../../utils/dateToUserTimeZone';
 
 const CurrentWeatherPanel = (props: { [name: string]: any }) => {
-    const images = useRef(require.context('../../assets', true));
+    const images = useRef(require.context('../../../assets/weather-backgrounds', true));
     const [dayId, setDayId] = useState<number>(0);
 
     const getImagePath = () => {

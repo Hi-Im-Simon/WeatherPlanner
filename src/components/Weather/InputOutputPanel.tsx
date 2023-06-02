@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Text, StyleSheet, View, ScrollView, Button } from 'react-native';
 import Slider from '@react-native-community/slider';
 
+import Map from './Map';
+
 import dateToUserTimeZone from '../../utils/dateToUserTimeZone';
 
 const DEFAULT_SLIDER_VALUE = 3;
@@ -148,14 +150,14 @@ const InputOutputPanel = (props: { [name: string]: any }) => {
             const hasDays = (weatherCodesDay.size > 0);
             const hasNights = (weatherCodesNight.size > 0);
 
-            console.log(weatherCodesDay)
-            console.log(weatherCodesNight)
-            console.log(minTempDay)
-            console.log(minTempNight)
-            console.log(maxTempDay)
-            console.log(maxTempNight)
-            console.log(maxWindDay)
-            console.log(maxWindNight)
+            // console.log(weatherCodesDay)
+            // console.log(weatherCodesNight)
+            // console.log(minTempDay)
+            // console.log(minTempNight)
+            // console.log(maxTempDay)
+            // console.log(maxTempNight)
+            // console.log(maxWindDay)
+            // console.log(maxWindNight)
         }
     }, [chosenPeriodHours, props.currentCell]);
 
