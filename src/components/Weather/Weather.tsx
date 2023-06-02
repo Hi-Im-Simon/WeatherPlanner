@@ -24,7 +24,7 @@ const Weather = (props: { [name: string]: any }) => {
             `.replace(/\s/g, '') // remove spaces
         ).then((res) => {
             res.json().then((json) => {
-                console.log(json)
+                // console.log(json)
                 setWeather(json);
                 //also scroll to current time
                 const currentHourGMT = new Date(json.current_weather.time).getHours()
@@ -43,7 +43,6 @@ const Weather = (props: { [name: string]: any }) => {
 
     useEffect(() => {
         getWeather();
-        console.log(props.coords)
     }, [props.coords]);
 
     return (
@@ -142,7 +141,7 @@ const styles = StyleSheet.create({
         height: '100%',
     },
     weatherCells: {
-        flex: 5,
+        flex: 4,
     },
     cell: {
         width: 90,
@@ -150,7 +149,7 @@ const styles = StyleSheet.create({
 
     // bottom panels
     bottomPanel: {
-        flex: 15,
+        flex: 16,
     },
 });
 

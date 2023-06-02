@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Alert, Text, Linking, StyleSheet, View, Image, TouchableOpacity, Dimensions, Button } from 'react-native';
+import { Alert, Text, Linking, StyleSheet, View, Image, TouchableOpacity, Dimensions } from 'react-native';
 import * as Location from 'expo-location';
 import Weather from './Weather/Weather';
 
-import Map from './Weather/Map';
+import MapMenu from './Weather/MapMenu';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -11,32 +11,29 @@ const height = Dimensions.get('window').height;
 const Main = () => {
     const [locationPermission, setLocationPermission] = useState<boolean>(false);
     // actual location, only changed on app init or when user sets it
-    const [location, setLocation] = useState<Location.LocationObject | null>(null);
+    const [location, setLocation] = useState<Location.LocationObjectCoords | null>(null);
     // temp location, buf between getLocation without setting and Map component init
-    const [tempLocation, setTempLocation] = useState<Location.LocationObject | null>(null);
-    // location that the user currently is hovering over in the map, will be set to `location` on confirm
-    const chosenLocation = useRef<Location.LocationObjectCoords | null>(null);
+    const [mapRefreshLocation, setMapRefreshLocation] = useState<Location.LocationObjectCoords | null>(null);
     const [showMenu, setShowMenu] = useState<boolean>(false);
     const screenWidth = useRef<number>(width);
     const screenHeight = useRef<number>(height);
 
     const getLocation = async (set: boolean = false) => {
-        setTempLocation(null);
+        // setMapStartLocation(null);
 
-        const retryGetLocation = async(set: boolean, firstRun: boolean = false) => {
-            if (tempLocation == null || firstRun) {
-                Location.getLastKnownPositionAsync({}).then((loc) => {
-                    if (loc !== null) {
-                        setTempLocation(loc);
-                        if (set) {
-                            setLocation(loc);
-                        }
+        const retryGetLocation = async (set: boolean) => {
+            Location.getLastKnownPositionAsync({}).then((loc: Location.LocationObject | null) => {
+                if (loc !== null) {
+                    if (set) {
+                        setLocation(loc.coords);
+                    } else {
+                        setMapRefreshLocation(loc.coords);
                     }
-                    else {
-                        setTimeout(() => retryGetLocation(set), 500);
-                    }
-                });
-            }
+                }
+                else {
+                    setTimeout(() => retryGetLocation(set), 500);
+                }
+            });
         }
 
         try {
@@ -47,7 +44,7 @@ const Main = () => {
             if (locationStatus.granted) {
                 // if they did, proceed to get user's location
                 setLocationPermission(true);
-                retryGetLocation(set, true)
+                retryGetLocation(set)
             }
             else {
                 // if not, try to get it again
@@ -95,6 +92,7 @@ const Main = () => {
                         {/* dropdown menu button (position absolute) */}
                         <TouchableOpacity style={[styles.buttonView, showMenu && styles.buttonViewShowMenu]}
                             onPress={() => {
+                                setMapRefreshLocation(location);
                                 setShowMenu((cur) => !cur);
                             }}
                             activeOpacity={0.4}
@@ -105,45 +103,20 @@ const Main = () => {
                         </TouchableOpacity>
 
                         {/* dropdown menu (position absolute) */}
-                        { showMenu &&
+                        {showMenu &&
                             <View style={styles.dropdown}>
-                                {/* menu */}
-                                <View style={styles.dropdownMenu}>
-                                    {/* choose button */}
-                                    <View style={styles.dropdownMenuItem}>
-                                        <Button
-                                            title='Confirm'
-                                            onPress={() => {
-                                                setLocation({
-                                                    coords: chosenLocation.current!,
-                                                    timestamp: 0,
-                                                });
-                                            }}
-                                        />
-                                    </View>
-                                    {/* refresh button */}
-                                    <View style={styles.dropdownMenuItem}>
-                                        <Button
-                                            title='Refresh'
-                                            onPress={() => {
-                                                getLocation();
-                                            }}
-                                        />
-                                    </View>
-                                </View>
-
-                                {/* display map */}
-                                <Map
-                                    coords={tempLocation?.coords}
-                                    chosenLocation={chosenLocation}
+                                <MapMenu
+                                    startCoords={mapRefreshLocation}
+                                    getLocation={getLocation}
+                                    setLocation={setLocation}
+                                    setShowMenu={setShowMenu}
                                 />
-                                
                             </View>
                         }
 
                         {/* actual app */}
                         <Weather
-                            coords={location.coords}
+                            coords={location}
                             screenWidth={screenWidth}
                         />
                     </>
@@ -197,19 +170,6 @@ const styles = StyleSheet.create({
         width: width,
         height: height,
         zIndex: 5,
-    },
-    dropdownMenu: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        position: 'absolute',
-        alignSelf: 'stretch',
-        gap: 150,
-        zIndex: 6,
-    },
-    dropdownMenuItem: {
-        flex: 1,
-        backgroundColor: 'red',
     },
 });
 

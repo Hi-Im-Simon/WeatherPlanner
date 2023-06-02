@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Text, StyleSheet, View, ScrollView, Button } from 'react-native';
 import Slider from '@react-native-community/slider';
 
-import Map from './Map';
+import Map from './MapMenu';
 
 import dateToUserTimeZone from '../../utils/dateToUserTimeZone';
 
