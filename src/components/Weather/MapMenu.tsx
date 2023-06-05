@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { StyleSheet, View, Button } from 'react-native';
-import * as Location from 'expo-location';
-import MapView, {Region} from 'react-native-maps';
+import MapView, {Region, Marker} from 'react-native-maps';
 
 const MapMenu = (props: {[name: string]: any}) => {
     const [region, setRegion] = useState<Region | undefined>();
@@ -51,7 +50,14 @@ const MapMenu = (props: {[name: string]: any}) => {
                             Math.abs(reg.longitude - region.longitude) > 0.00001
                         ) setRegion(reg)
                     }}
-                />
+                >
+                    {region !== undefined &&
+                        <Marker
+                            coordinate={{ latitude: region!.latitude, longitude: region!.longitude }}
+                        />
+                    }
+                    
+                </MapView>
             }
             </View>
         </>

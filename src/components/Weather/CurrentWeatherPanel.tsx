@@ -188,17 +188,29 @@ const CurrentWeatherPanel = (props: { [name: string]: any }) => {
                         <View style={styles.dataPairs}>
                             {/* sunrise */}
                             <Text style={[styles.dataLeftText, styles.text]}>Sunrise</Text>
+                            
                             <Text style={[styles.dataRightText, styles.text]}>
-                                    {dateToUserTimeZone(props.weather.daily.sunrise[dayId]).toFormat('hh:mm a')}
+                                {dateToUserTimeZone(props.weather.daily.sunrise[dayId]).toFormat('hh:mm a') !== 'Invalid DateTime' ?
+                                    dateToUserTimeZone(props.weather.daily.sunrise[dayId]).toFormat('hh:mm a')
+                                    :
+                                    'Not available'
+                                }
                             </Text>
                         </View>
+
                         <View style={styles.dataPairs}>
                             {/* sunset */}
                             <Text style={[styles.dataLeftText, styles.text]}>Sunset</Text>
+                            
                             <Text style={[styles.dataRightText, styles.text]}>
-                                    {dateToUserTimeZone(props.weather.daily.sunset[dayId]).toFormat('hh:mm a')}
+                                {dateToUserTimeZone(props.weather.daily.sunset[dayId]).toFormat('hh:mm a') !== 'Invalid DateTime' ?
+                                    dateToUserTimeZone(props.weather.daily.sunset[dayId]).toFormat('hh:mm a')
+                                    :
+                                    'Not available'
+                                }
                             </Text>
                         </View>
+                        
                     </View>
                 </View>
                 </ImageBackground>

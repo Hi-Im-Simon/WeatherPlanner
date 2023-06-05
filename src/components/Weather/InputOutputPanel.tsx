@@ -96,7 +96,7 @@ const InputOutputPanel = (props: { [name: string]: any }) => {
         // if current cell or chosen period was changed, generate new data
         if (chosenPeriodHours !== undefined && props.currentCell !== undefined) {
             const iCell = props.currentCell;
-            const nCells = props.weather.hourly.weathercode.length;
+            const nCells = props.weather.hourly.weathercode.filter((code: number|null) => code !== null).length;
             let nHours = chosenPeriodHours;
             
             // check if chosen period doesn't exceed maximum
@@ -108,7 +108,7 @@ const InputOutputPanel = (props: { [name: string]: any }) => {
                 
                 setPeriodWarningMsg(
                     // `Selected period is too long. Using max -${days ? ` ${days}d` : ''}${hours ? ` ${hours}h` : ''}`
-                    `Warning: Selected period exceeds available forecast.\nUsing max available (${
+                    `Selected period exceeds available forecast.\nUsing max available (${
                         days ? `${days}d` : ''
                     }${
                         (days && hours) ? ' ' : ''
@@ -302,7 +302,6 @@ const InputOutputPanel = (props: { [name: string]: any }) => {
                     specificInfo.push(<>{icon} {text} (min. {minTempNight}{props.weather.hourly_units.temperature_2m}).</>);
             }
             // warm
-            console.log()
             icon = <Octicons name="sun" size={18} color="black" />;
             if (hasDays) {
                 let text = '';
@@ -349,7 +348,7 @@ const InputOutputPanel = (props: { [name: string]: any }) => {
             <View style={[styles.part, styles.optionsView]}>
                 <View style={styles.sliderTextAll}>
                     <Text style={styles.sliderTextEdge}></Text>
-                    <Text style={styles.sliderTextCenter}>Adventure length:</Text>
+                    <Text style={styles.sliderTextCenter}>Trip length:</Text>
                     <Text style={styles.sliderTextEdge}>{sliderVal?.top ? `${sliderVal?.top} ${sliderVal?.topTail}` : ''}</Text>
                 </View>
 
@@ -363,8 +362,9 @@ const InputOutputPanel = (props: { [name: string]: any }) => {
                     style={[styles.slider,
                         { width: props.screenWidth.current * 0.75 }]}
                     minimumValue={1} maximumValue={43} step={1} value={3}
-                    onValueChange={handleSliderValue}
-                    onSlidingComplete={(i: number) => handleSliderValue(i, true)}
+                    // onValueChange={handleSliderValue}
+                    // onSlidingComplete={(i: number) => handleSliderValue(i, true)}
+                    onValueChange={(i: number) => handleSliderValue(i, true)}
                 />
                 {periodWarningMsg &&
                     <Text style={styles.warningMsg} numberOfLines={2}

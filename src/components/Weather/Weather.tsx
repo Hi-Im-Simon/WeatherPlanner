@@ -84,18 +84,20 @@ const Weather = (props: { [name: string]: any }) => {
                         >
                             {
                                 weather.hourly.time.map((_: any, i: number) => {
-                                    return <WeatherCell
-                                        key={`WeatherCell-${i}`}
-                                        i={i}
-                                        scrollToCell={scrollToCell}
-                                        isCurrentCell={currentCell == i}
-                                        time={weather.hourly.time[i]}
-                                        temperature={weather.hourly.temperature_2m[i]}
-                                        apparentTemperature={weather.hourly.apparent_temperature[i]}
-                                        temperatureUnits={weather.hourly_units.temperature_2m}
-                                        windspeedUnits={weather.hourly_units.windspeed_10m}
-                                        cellWidth={styles.cell.width}
-                                    />
+                                    if (weather.hourly.temperature_2m[i] !== null && weather.hourly.weathercode[i] !== null) {
+                                        return <WeatherCell
+                                            key={`WeatherCell-${i}`}
+                                            i={i}
+                                            scrollToCell={scrollToCell}
+                                            isCurrentCell={currentCell == i}
+                                            time={weather.hourly.time[i]}
+                                            temperature={weather.hourly.temperature_2m[i]}
+                                            apparentTemperature={weather.hourly.apparent_temperature[i]}
+                                            temperatureUnits={weather.hourly_units.temperature_2m}
+                                            windspeedUnits={weather.hourly_units.windspeed_10m}
+                                            cellWidth={styles.cell.width}
+                                        />
+                                    }
                                 })
                             }
                         </ScrollView>
@@ -123,6 +125,7 @@ const Weather = (props: { [name: string]: any }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        justifyContent: 'center',
     },
     part: {
         alignItems: 'center',
