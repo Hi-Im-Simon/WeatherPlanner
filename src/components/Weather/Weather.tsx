@@ -27,7 +27,7 @@ const Weather = (props: { [name: string]: any }) => {
                 // console.log(json)
                 setWeather(json);
                 //also scroll to current time
-                const currentHourGMT = new Date(json.current_weather.time).getHours()
+                const currentHourGMT = new Date(json.current_weather.time).getHours();
                 scrollToCell(currentHourGMT, false);
             });
         });
